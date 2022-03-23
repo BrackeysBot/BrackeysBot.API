@@ -28,11 +28,20 @@ public sealed class Permission : IEquatable<Permission>
     /// <param name="name">The name of the permission.</param>
     /// <param name="type">The type of the permission.</param>
     /// <param name="ids">The set of applicable IDs.</param>
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="name" /> is <see langword="null" />, empty, or consists of only whitespace.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     <paramref name="type" /> is not a value defined in <see cref="PermissionType" />.
+    /// </exception>
     public Permission(string name, PermissionType type, params string[] ids)
     {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        if (!Enum.IsDefined(type)) throw new ArgumentOutOfRangeException(nameof(type));
+
         Name = name;
         Type = type;
-        _ids = ids.ToArray(); // defensive copy
+        _ids = ids is {Length: > 0} ? ids.ToArray() /* defensive copy */ : Array.Empty<string>();
     }
 
     /// <summary>
