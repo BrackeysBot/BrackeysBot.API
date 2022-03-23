@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BrackeysBot.API.Configuration;
+using BrackeysBot.API.Permissions;
 using NLog;
 
 namespace BrackeysBot.API.Plugins;
@@ -32,6 +34,18 @@ public interface IPlugin : IDisposable, IConfigurationHolder
     ILogger Logger { get; }
 
     /// <summary>
+    ///     Gets a list of the default permissions for this plugin.
+    /// </summary>
+    /// <value>The default permissions.</value>
+    IReadOnlyList<Permission> PermissionDefaults { get; }
+
+    /// <summary>
+    ///     Gets a list of the current permissions for this plugin.
+    /// </summary>
+    /// <value>The current permissions.</value>
+    IReadOnlyList<Permission> Permissions { get; }
+
+    /// <summary>
     ///     Gets the information about this plugin.
     /// </summary>
     /// <value>A <see cref="BrackeysBot.API.Plugins.PluginInfo" /> object containing</value>
@@ -48,4 +62,14 @@ public interface IPlugin : IDisposable, IConfigurationHolder
     /// </summary>
     /// <value>The service provider.</value>
     public IServiceProvider ServiceProvider { get; }
+
+    /// <summary>
+    ///     Gets a permission by its name.
+    /// </summary>
+    /// <param name="name">The name of the permission.</param>
+    /// <returns>The permission with the specified name, or <see langword="null" /> if no matching permission was found.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="name" /> is <see langword="null" />, empty, or consists of only whitespace.
+    /// </exception>
+    Permission? GetPermission(string name);
 }

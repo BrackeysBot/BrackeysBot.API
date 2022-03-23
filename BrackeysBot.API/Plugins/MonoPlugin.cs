@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
 using BrackeysBot.API.Configuration;
+using BrackeysBot.API.Permissions;
 using DisCatSharp;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -35,6 +37,12 @@ public abstract class MonoPlugin : IPlugin
     public ILogger Logger { get; internal set; } = null!;
 
     /// <inheritdoc />
+    public IReadOnlyList<Permission> PermissionDefaults { get; internal set; } = Array.Empty<Permission>();
+
+    /// <inheritdoc />
+    public IReadOnlyList<Permission> Permissions { get; internal set; } = Array.Empty<Permission>();
+
+    /// <inheritdoc />
     public PluginInfo PluginInfo { get; internal set; } = null!;
 
     /// <inheritdoc />
@@ -46,6 +54,18 @@ public abstract class MonoPlugin : IPlugin
     /// <inheritdoc />
     public virtual void Dispose()
     {
+    }
+
+    /// <inheritdoc />
+    public Permission? GetPermission(string name)
+    {
+        for (var index = 0; index < Permissions.Count; index++)
+        {
+            if (string.Equals(name, Permissions[index].Name, StringComparison.Ordinal))
+                return Permissions[index];
+        }
+
+        return null;
     }
 
     /// <inheritdoc />
