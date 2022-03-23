@@ -1,10 +1,10 @@
 <h1 align="center">BrackeysBot.API</h1>
 <p align="center"><i>A C# Discord framework tailored for the Brackeys Discord server, with support for hot-swappable plugins.</i></p>
 <p align="center">
-<a href="https://github.com/oliverbooth/BrackeysBot.API/releases"><img src="https://img.shields.io/github/v/release/oliverbooth/BrackeysBot?include_prereleases"></a>
-<a href="https://github.com/oliverbooth/BrackeysBot.API/actions?query=workflow%3A%22.NET%22"><img src="https://img.shields.io/github/workflow/status/oliverbooth/BrackeysBot.API/.NET" alt="GitHub Workflow Status" title="GitHub Workflow Status"></a>
-<a href="https://github.com/oliverbooth/BrackeysBot.API/issues"><img src="https://img.shields.io/github/issues/oliverbooth/BrackeysBot" alt="GitHub Issues" title="GitHub Issues"></a>
-<a href="https://github.com/oliverbooth/BrackeysBot.API/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/oliverbooth/BrackeysBot" alt="MIT License" title="MIT License"></a>
+<a href="https://github.com/BrackeysBot/BrackeysBot.API/releases"><img src="https://img.shields.io/github/v/release/BrackeysBot/BrackeysBot?include_prereleases"></a>
+<a href="https://github.com/BrackeysBot/BrackeysBot.API/actions?query=workflow%3A%22.NET%22"><img src="https://img.shields.io/github/workflow/status/BrackeysBot/BrackeysBot.API/.NET" alt="GitHub Workflow Status" title="GitHub Workflow Status"></a>
+<a href="https://github.com/BrackeysBot/BrackeysBot.API/issues"><img src="https://img.shields.io/github/issues/BrackeysBot/BrackeysBot" alt="GitHub Issues" title="GitHub Issues"></a>
+<a href="https://github.com/BrackeysBot/BrackeysBot.API/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/BrackeysBot/BrackeysBot" alt="MIT License" title="MIT License"></a>
 <a href="https://discord.gg/brackeys"><img src="https://discordapp.com/api/guilds/243005537342586880/widget.png?style=shield"></a>
 </p>
 
