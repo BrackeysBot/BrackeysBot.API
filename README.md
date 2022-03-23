@@ -16,23 +16,6 @@ The aim of this project is to better organise the featureset of the ever-growing
 ## Contributing
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-# Code Requirements
-* For the most part, BrackeysBot and BrackeysBot.API use Microsoft's defined [coding conventions](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) and [framework design guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/).
-* When bumping the target .NET version, only target LTS releases (even-numbered releases starting with .NET 5).
-* No tabs; use 4 spaces instead.
-    * Blank lines should contain no spaces.
-* No trailing whitespaces at the end of lines.
-* Each file must be terminated with a blank line.
-* Try to keep lines at 130 characters maximum.
-* No one-line methods.
-* Do not use expression bodies for methods. Expression-bodied properties are okay.
-* All major additions should have documentation.
-* All code should be free of magic values. If this is not possible, it should be marked with a `TODO` comment indicating it should be addressed in the future.
-* No unnecessary code changes. Look through all your changes before submitting a PR.
-* Do not attempt to fix multiple problems with a single patch or PR.
-* Avoid moving or renaming classes.
-* All type members must have explicit nullability annotations through the use of the `?` operator. **Do not use `CanBeNullAttribute` or `NotNullAttribute`**.
-
 ## License
 BrackeysBot and most of its plugins are under the [MIT License](LICENSE.md).
 
