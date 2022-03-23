@@ -13,9 +13,6 @@ BrackeysBot is a Discord bot framework with the goal of segregating functionalit
 
 The aim of this project is to better organise the featureset of the ever-growing [BrackeysBot version 3](https://github.com/yiliansource/brackeys-bot/), by splitting functionality into single-purpose bots while maintaining feature parity with version 3.
 
-## Building
-
-
 ## Contributing
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
