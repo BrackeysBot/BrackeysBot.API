@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DisCatSharp;
 using DisCatSharp.Entities;
@@ -6,10 +7,19 @@ using DisCatSharp.Entities;
 namespace BrackeysBot.API.Extensions;
 
 /// <summary>
-///     Extension methods for <see cref="DiscordGuildExtensions" />.
+///     Extension methods for <see cref="DiscordGuild" />.
 /// </summary>
 public static class DiscordGuildExtensions
 {
+    /// <summary>
+    ///     Joins all active threads in the guild that this client has permission to view.
+    /// </summary>
+    /// <param name="guild">The guild whose active threads to join.</param>
+    public static Task JoinAllThreadsAsync(this DiscordGuild guild)
+    {
+        return Task.WhenAll(guild.Threads.Values.Select(t => t.JoinAsync()));
+    }
+
     /// <summary>
     ///     Normalizes a <see cref="DiscordGuild" /> so that the internal client is assured to be a specified value.
     /// </summary>
