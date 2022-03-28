@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Loader;
@@ -37,10 +37,10 @@ public abstract class MonoPlugin : IPlugin
     public ILogger Logger { get; internal set; } = null!;
 
     /// <inheritdoc />
-    public IReadOnlyList<Permission> PermissionDefaults { get; internal set; } = Array.Empty<Permission>();
+    public IReadOnlyList<Permission> PermissionDefaults { get; internal set; } = ArraySegment<Permission>.Empty;
 
     /// <inheritdoc />
-    public IReadOnlyList<Permission> Permissions { get; internal set; } = Array.Empty<Permission>();
+    public IReadOnlyList<Permission> Permissions { get; internal set; } = ArraySegment<Permission>.Empty;
 
     /// <inheritdoc />
     public PluginInfo PluginInfo { get; internal set; } = null!;
