@@ -19,6 +19,18 @@ public interface IPlugin : IDisposable, IConfigurationHolder
     DirectoryInfo DataDirectory { get; }
 
     /// <summary>
+    ///     Gets the loaded dependencies for this plugin.
+    /// </summary>
+    /// <value>The plugin dependencies.</value>
+    IReadOnlyList<IPlugin> Dependencies { get; }
+
+    /// <summary>
+    ///     Gets the loaded dependants for this plugin.
+    /// </summary>
+    /// <value>The plugin dependants.</value>
+    IReadOnlyList<IPlugin> Dependants { get; }
+
+    /// <summary>
     ///     Gets the date and time at which this plugin was last enabled.
     /// </summary>
     /// <value>

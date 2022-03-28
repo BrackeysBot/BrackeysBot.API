@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Loader;
@@ -29,6 +29,12 @@ public abstract class MonoPlugin : IPlugin
 
     /// <inheritdoc />
     public DirectoryInfo DataDirectory { get; internal set; } = null!;
+
+    /// <inheritdoc />
+    public IReadOnlyList<IPlugin> Dependencies { get; internal set; } = ArraySegment<IPlugin>.Empty;
+
+    /// <inheritdoc />
+    public IReadOnlyList<IPlugin> Dependants { get; internal set; } = ArraySegment<IPlugin>.Empty;
 
     /// <inheritdoc />
     public DateTimeOffset? EnableTime { get; internal set; } = null!;
