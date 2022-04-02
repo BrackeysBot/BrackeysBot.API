@@ -5,7 +5,7 @@ using System.Runtime.Loader;
 using System.Threading.Tasks;
 using BrackeysBot.API.Configuration;
 using BrackeysBot.API.Permissions;
-using DisCatSharp;
+using DSharpPlus;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 
@@ -19,9 +19,9 @@ public abstract class MonoPlugin : IPlugin
     internal AssemblyLoadContext LoadContext { get; set; } = null!;
 
     /// <summary>
-    ///     Gets the underlying <see cref="DisCatSharp.DiscordClient" /> instance.
+    ///     Gets the underlying <see cref="DSharpPlus.DiscordClient" /> instance.
     /// </summary>
-    /// <value>The underlying <see cref="DisCatSharp.DiscordClient" />.</value>
+    /// <value>The underlying <see cref="DSharpPlus.DiscordClient" />.</value>
     protected internal DiscordClient? DiscordClient { get; internal set; }
 
     /// <inheritdoc />

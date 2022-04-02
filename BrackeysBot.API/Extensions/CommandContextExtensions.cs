@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BrackeysBot.API.Permissions;
 using BrackeysBot.API.Plugins;
-using DisCatSharp.CommandsNext;
-using DisCatSharp.CommandsNext.Attributes;
+using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BrackeysBot.API.Extensions;

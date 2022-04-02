@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BrackeysBot.API.Extensions;
-using DisCatSharp.CommandsNext;
-using DisCatSharp.CommandsNext.Attributes;
+using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 
 namespace BrackeysBot.API.Permissions;
 

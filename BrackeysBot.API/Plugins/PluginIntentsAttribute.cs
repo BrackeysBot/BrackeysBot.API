@@ -1,5 +1,5 @@
 ﻿using System;
-using DisCatSharp;
+using DSharpPlus;
 
 namespace BrackeysBot.API.Plugins;
 

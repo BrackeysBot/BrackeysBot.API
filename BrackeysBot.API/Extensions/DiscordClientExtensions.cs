@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using DisCatSharp;
+using DSharpPlus;
 
 namespace BrackeysBot.API.Extensions;
 
@@ -20,14 +20,14 @@ public static class DiscordClientExtensions
     public static void AutoJoinThreads(this DiscordClient client, bool rejoinIfRemoved = true)
     {
         client.GuildAvailable += (_, args) => args.Guild.JoinAllThreadsAsync();
-        client.ThreadCreated += (_, args) => args.Thread.JoinAsync();
+        client.ThreadCreated += (_, args) => args.Thread.JoinThreadAsync();
 
         if (rejoinIfRemoved)
         {
             client.ThreadMembersUpdated += (_, args) =>
             {
                 if (args.RemovedMembers.Any(m => m.Id == client.CurrentUser.Id))
-                    return args.Thread.JoinAsync();
+                    return args.Thread.JoinThreadAsync();
 
                 return Task.CompletedTask;
             };

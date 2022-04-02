@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DisCatSharp;
-using DisCatSharp.Entities;
+using DSharpPlus;
+using DSharpPlus.Entities;
 
 namespace BrackeysBot.API.Extensions;
 
@@ -10,6 +10,18 @@ namespace BrackeysBot.API.Extensions;
 /// </summary>
 public static class DiscordUserExtensions
 {
+    /// <summary>
+    ///     Returns the user's username with the discriminator, in the format <c>username#discriminator</c>.
+    /// </summary>
+    /// <param name="user">The user whose username and discriminator to retrieve.</param>
+    /// <returns>A string in the format <c>username#discriminator</c></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="user" /> is <see langword="null" />.</exception>
+    public static string GetUsernameWithDiscriminator(this DiscordUser user)
+    {
+        if (user is null) throw new ArgumentNullException(nameof(user));
+        return $"{user.Username}#{user.Discriminator}";
+    }
+
     /// <summary>
     ///     Normalizes a <see cref="DiscordUser" /> so that the internal client is assured to be a specified value.
     /// </summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DisCatSharp;
-using DisCatSharp.Entities;
+using DSharpPlus;
+using DSharpPlus.Entities;
 
 namespace BrackeysBot.API.Extensions;
 

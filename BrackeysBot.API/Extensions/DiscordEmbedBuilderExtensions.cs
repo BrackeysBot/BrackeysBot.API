@@ -1,6 +1,6 @@
-﻿using System;
-using DisCatSharp;
-using DisCatSharp.Entities;
+using System;
+using DSharpPlus;
+using DSharpPlus.Entities;
 
 namespace BrackeysBot.API.Extensions;
 
@@ -236,7 +236,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
     public static DiscordEmbedBuilder WithAuthor(this DiscordEmbedBuilder embedBuilder, DiscordUser author)
     {
-        return embedBuilder.WithAuthor(author.UsernameWithDiscriminator, iconUrl: author.GetAvatarUrl(ImageFormat.Png));
+        return embedBuilder.WithAuthor(author.GetUsernameWithDiscriminator(), iconUrl: author.GetAvatarUrl(ImageFormat.Png));
     }
 
     /// <summary>
