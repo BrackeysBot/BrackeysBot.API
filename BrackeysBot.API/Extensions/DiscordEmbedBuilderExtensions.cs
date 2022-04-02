@@ -18,6 +18,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
     /// <typeparam name="T">The value type of the field.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public static DiscordEmbedBuilder AddField<T>(this DiscordEmbedBuilder embedBuilder, string name, T value,
         bool inline = false)
     {
