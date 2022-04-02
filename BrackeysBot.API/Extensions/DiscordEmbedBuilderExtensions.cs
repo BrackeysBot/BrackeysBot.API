@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using DSharpPlus;
 using DSharpPlus.Entities;
 
@@ -121,8 +121,8 @@ public static class DiscordEmbedBuilderExtensions
     ///     The value to be used as the field value if <paramref name="condition" /> is <see langword="false" />.
     /// </param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
-    /// <typeparam name="TTrue">The type of the truthy value.</typeparam>
-    /// <typeparam name="TFalse">The type of the falsey value.</typeparam>
+    /// <typeparam name="TTrue">The type of the truth value.</typeparam>
+    /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
     public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder, bool condition,
         string name, TTrue valueIfTrue, TFalse valueIfFalse, bool inline = false)
@@ -148,8 +148,8 @@ public static class DiscordEmbedBuilderExtensions
     ///     The delegate whose return value is used if <paramref name="condition" /> is <see langword="false" />.
     /// </param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
-    /// <typeparam name="TTrue">The type of the truthy value.</typeparam>
-    /// <typeparam name="TFalse">The type of the falsey value.</typeparam>
+    /// <typeparam name="TTrue">The type of the truth value.</typeparam>
+    /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
     public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder, bool condition,
         string name, Func<TTrue> valueEvaluatorIfTrue, Func<TFalse> valueEvaluatorIfFalse, bool inline = false)
@@ -181,8 +181,8 @@ public static class DiscordEmbedBuilderExtensions
     ///     <paramref name="conditionEvaluator" /> is <see langword="false" />.
     /// </param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
-    /// <typeparam name="TTrue">The type of the truthy value.</typeparam>
-    /// <typeparam name="TFalse">The type of the falsey value.</typeparam>
+    /// <typeparam name="TTrue">The type of the truth value.</typeparam>
+    /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
     public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder,
         Func<bool> conditionEvaluator, string name, Func<TTrue> valueEvaluatorIfTrue, Func<TFalse> valueEvaluatorIfFalse,
@@ -216,8 +216,8 @@ public static class DiscordEmbedBuilderExtensions
     ///     <paramref name="conditionEvaluator" /> is <see langword="false" />.
     /// </param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
-    /// <typeparam name="TTrue">The type of the truthy value.</typeparam>
-    /// <typeparam name="TFalse">The type of the falsey value.</typeparam>
+    /// <typeparam name="TTrue">The type of the truth value.</typeparam>
+    /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
     public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder,
         Func<bool> conditionEvaluator, string name, TTrue valueIfTrue, TFalse valueIfFalse, bool inline = false)
