@@ -59,7 +59,7 @@ public static class DiscordUserExtensions
     public static async Task<bool> IsMemberOfAsync(this DiscordUser user, DiscordGuild guild)
     {
         if (guild.Members.TryGetValue(user.Id, out DiscordMember? _))
-            return false;
+            return true;
 
         try
         {
