@@ -20,6 +20,28 @@ public static class DiscordMessageExtensions
     }
 
     /// <summary>
+    ///     Deletes this message after a specified delay.
+    /// </summary>
+    /// <param name="message">The message to delete.</param>
+    /// <param name="delay">The delay before deletion.</param>
+    /// <param name="reason">The reason for the deletion.</param>
+    public static Task DeleteAfterAsync(this DiscordMessage message, TimeSpan delay, string? reason = null)
+    {
+        return Task.Delay(delay).ContinueWith(_ => message.DeleteAsync(reason));
+    }
+
+    /// <summary>
+    ///     Deletes the message as created by this task after a specified delay.
+    /// </summary>
+    /// <param name="task">The task whose <see cref="DiscordMessage" /> result should be deleted.</param>
+    /// <param name="delay">The delay before deletion.</param>
+    /// <param name="reason">The reason for the deletion.</param>
+    public static Task DeleteAfterAsync(this Task<DiscordMessage> task, TimeSpan delay, string? reason = null)
+    {
+        return task.ContinueWith(message => message.DeleteAfterAsync(delay, reason));
+    }
+
+    /// <summary>
     ///     Normalizes a <see cref="DiscordMessage" /> so that the internal client is assured to be a specified value.
     /// </summary>
     /// <param name="message">The <see cref="DiscordMessage" /> to normalize.</param>
