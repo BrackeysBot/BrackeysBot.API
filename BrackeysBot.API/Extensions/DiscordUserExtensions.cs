@@ -20,18 +20,18 @@ public static class DiscordUserExtensions
     ///     The correlated <see cref="DiscordMember" />, or <see langword="null" /> if this user is not in
     ///     <paramref name="guild" />.
     /// </returns>
-    public static Task<DiscordMember?> GetAsMemberAsync(this DiscordUser user, DiscordGuild guild)
+    public static async Task<DiscordMember?> GetAsMemberAsync(this DiscordUser user, DiscordGuild guild)
     {
         if (guild.Members.TryGetValue(user.Id, out DiscordMember? member))
-            return Task.FromResult<DiscordMember?>(member);
+            return member;
 
         try
         {
-            return guild.GetMemberAsync(user.Id);
+            return await guild.GetMemberAsync(user.Id);
         }
         catch (NotFoundException)
         {
-            return Task.FromResult<DiscordMember?>(null);
+            return null;
         }
     }
 
