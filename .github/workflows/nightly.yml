@@ -23,9 +23,6 @@ jobs:
     - name: Add GitHub NuGet source
       run: dotnet nuget add source --username oliverbooth --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/BrackeysBot/index.json"
 
-    - name: Add nuget.org NuGet source
-      run: dotnet nuget add source --name nuget "https://api.nuget.org/v3/index.json"
-
     - name: Restore dependencies
       run: dotnet restore
 
