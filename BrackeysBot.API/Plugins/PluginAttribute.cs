@@ -12,9 +12,12 @@ public sealed class PluginAttribute : Attribute
     ///     Initializes a new instance of the <see cref="PluginAttribute" /> class.
     /// </summary>
     /// <param name="name">The name of this plugin.</param>
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="name" /> is <see langword="null" />, empty, or consists of only whitespace.
+    /// </exception>
     public PluginAttribute(string name)
     {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentNullException(name) : name;
     }
 
     /// <summary>
