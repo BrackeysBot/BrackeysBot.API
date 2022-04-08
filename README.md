@@ -1,7 +1,8 @@
 <h1 align="center">BrackeysBot.API</h1>
 <p align="center"><i>A C# Discord framework tailored for the Brackeys Discord server, with support for hot-swappable plugins.</i></p>
 <p align="center">
-<a href="https://github.com/BrackeysBot/BrackeysBot.API/releases"><img src="https://img.shields.io/github/v/release/BrackeysBot/BrackeysBot.API?include_prereleases"></a>
+<a href="https://www.nuget.org/packages/BrackeysBot.API/"><img src="https://img.shields.io/nuget/v/BrackeysBot.API?label=stable%20build"></a>
+<a href="https://www.nuget.org/packages/BrackeysBot.API/"><img src="https://img.shields.io/nuget/vpre/BrackeysBot.API?label=nightly%20build"></a>
 <a href="https://github.com/BrackeysBot/BrackeysBot.API/actions?query=workflow%3A%22.NET%22"><img src="https://img.shields.io/github/workflow/status/BrackeysBot/BrackeysBot.API/.NET" alt="GitHub Workflow Status" title="GitHub Workflow Status"></a>
 <a href="https://github.com/BrackeysBot/BrackeysBot.API/issues"><img src="https://img.shields.io/github/issues/BrackeysBot/BrackeysBot.API" alt="GitHub Issues" title="GitHub Issues"></a>
 <a href="https://github.com/BrackeysBot/BrackeysBot.API/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/BrackeysBot/BrackeysBot.API" alt="MIT License" title="MIT License"></a>
