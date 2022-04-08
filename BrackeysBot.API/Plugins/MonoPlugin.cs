@@ -16,13 +16,26 @@ namespace BrackeysBot.API.Plugins;
 /// </summary>
 public abstract class MonoPlugin : IPlugin
 {
+    private DiscordClient? _client;
+
     internal AssemblyLoadContext LoadContext { get; set; } = null!;
 
     /// <summary>
     ///     Gets the underlying <see cref="DSharpPlus.DiscordClient" /> instance.
     /// </summary>
     /// <value>The underlying <see cref="DSharpPlus.DiscordClient" />.</value>
-    protected internal DiscordClient? DiscordClient { get; internal set; }
+    /// <exception cref="NotSupportedException">The plugin does not have a bot token associated with it.</exception>
+    protected internal DiscordClient DiscordClient
+    {
+        get
+        {
+            if (_client is null)
+                throw new NotSupportedException("Cannot access the DiscordClient for a plugin which has no token.");
+
+            return _client;
+        }
+        internal set => _client = value;
+    }
 
     /// <inheritdoc />
     public IConfiguration Configuration { get; internal set; } = null!;
