@@ -26,6 +26,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
+    - name: Build
+      run: dotnet build -c Debug
+
     - name: Build NuGet package
       run: |
         mkdir build
