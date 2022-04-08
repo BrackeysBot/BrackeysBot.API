@@ -16,7 +16,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(VersionSuffix)' != '' And '$(BuildNumber)' != ''">
-        <Version>$(VersionPrefix)-$(VersionSuffix)-$(BuildNumber)</Version>
+        <Version>$(VersionPrefix)-$(VersionSuffix).$(BuildNumber)</Version>
         <AssemblyVersion>$(VersionPrefix).$(BuildNumber)</AssemblyVersion>
         <FileVersion>$(VersionPrefix).$(BuildNumber)</FileVersion>
     </PropertyGroup>
