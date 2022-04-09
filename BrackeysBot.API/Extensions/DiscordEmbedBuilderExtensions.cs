@@ -26,6 +26,23 @@ public static class DiscordEmbedBuilderExtensions
     }
 
     /// <summary>
+    ///     Adds a field of any value to an embed.
+    /// </summary>
+    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="name">The field name.</param>
+    /// <param name="valueEvaluator">The delegate to execute to retrieve the field value.</param>
+    /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
+    /// <typeparam name="T">The value type of the field.</typeparam>
+    /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static DiscordEmbedBuilder AddField<T>(this DiscordEmbedBuilder embedBuilder, string name, Func<T> valueEvaluator,
+        bool inline = false)
+    {
+        if (valueEvaluator is null) throw new ArgumentNullException(nameof(valueEvaluator));
+        return embedBuilder.AddField(name, valueEvaluator()?.ToString(), inline);
+    }
+
+    /// <summary>
     ///     Conditionally adds a field to an embed.
     /// </summary>
     /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
