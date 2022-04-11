@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using BrackeysBot.API.Exceptions;
+using Emzi0767.Utilities;
 using NLog;
 
 namespace BrackeysBot.API.Plugins;
@@ -11,6 +12,11 @@ namespace BrackeysBot.API.Plugins;
 /// </summary>
 public interface IPluginManager
 {
+    /// <summary>
+    ///     Called when a plugin has been loaded by this manager.
+    /// </summary>
+    event AsyncEventHandler<IPluginManager, PluginLoadEventArgs>? PluginLoaded;
+
     /// <summary>
     ///     Gets a read-only view of the plugins enabled by this manager.
     /// </summary>
