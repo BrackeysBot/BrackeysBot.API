@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
@@ -47,10 +49,30 @@ public sealed class ConversationContext
     public DiscordGuild? Guild => Channel.Guild;
 
     /// <summary>
+    ///     Gets the interaction which triggered this conversation, if any.
+    /// </summary>
+    /// <value>
+    ///     The interaction, or <see langword="null" /> if this conversation was not initiated by an application command.
+    /// </value>
+    public DiscordInteraction? Interaction { get; private init; }
+
+    /// <summary>
     ///     Gets the member who initiated the conversation, if this conversation is in a guild.
     /// </summary>
     /// <value>The member.</value>
-    public DiscordMember? Member { get; set; }
+    public DiscordMember? Member { get; }
+
+    /// <summary>
+    ///     Gets the message, sent by the user, that initiated the conversation, if any.
+    /// </summary>
+    /// <value>The original message, or <see langword="null" /> if no message is associated with this conversation.</value>
+    /// <remarks>
+    ///     This property will be the result of <see cref="CommandContext.Message" /> if this context was constructed via
+    ///     <see cref="FromCommandContext" />, or the result of the first entry in
+    ///     <see cref="DiscordInteractionResolvedCollection.Messages" /> if this context was constructed via
+    ///     <see cref="FromInteractionContext" /> or <see cref="FromContextMenuContext" /> - which may be <see langword="null" />.
+    /// </remarks>
+    public DiscordMessage? Message { get; private init; }
 
     /// <summary>
     ///     Gets the service provider for the conversation.
@@ -71,7 +93,10 @@ public sealed class ConversationContext
     /// <returns>A new instance of <see cref="ConversationContext" />.</returns>
     public static ConversationContext FromCommandContext(CommandContext context)
     {
-        return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel);
+        return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel)
+        {
+            Message = context.Message
+        };
     }
 
     /// <summary>
@@ -81,7 +106,11 @@ public sealed class ConversationContext
     /// <returns>A new instance of <see cref="ConversationContext" />.</returns>
     public static ConversationContext FromContextMenuContext(ContextMenuContext context)
     {
-        return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel);
+        return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel)
+        {
+            Interaction = context.Interaction,
+            Message = context.Interaction.Data.Resolved.Messages.FirstOrDefault().Value
+        };
     }
 
     /// <summary>
@@ -91,6 +120,76 @@ public sealed class ConversationContext
     /// <returns>A new instance of <see cref="ConversationContext" />.</returns>
     public static ConversationContext FromInteractionContext(InteractionContext context)
     {
-        return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel);
+        return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel)
+        {
+            Interaction = context.Interaction,
+            Message = context.Interaction.Data.Resolved.Messages.FirstOrDefault().Value
+        };
+    }
+
+
+    /// <summary>
+    ///     Responds to the original message with the specified content. If <see cref="Message" /> is <see langword="null" />, a
+    ///     new message is sent in <see cref="Channel" />; otherwise, a message as sent with a reply to <see cref="Message" />.
+    /// </summary>
+    /// <param name="content">The message content.</param>
+    /// <returns>The message response.</returns>
+    public Task<DiscordMessage> RespondAsync(string content)
+    {
+        var builder = new DiscordMessageBuilder();
+        builder.WithContent(content);
+        return RespondAsync(builder);
+    }
+
+
+    /// <summary>
+    ///     Responds to the original message with the specified content and embed. If <see cref="Message" /> is
+    ///     <see langword="null" />, a new message is sent in <see cref="Channel" />; otherwise, a message as sent with a reply to
+    ///     <see cref="Message" />.
+    /// </summary>
+    /// <param name="content">The message content.</param>
+    /// <param name="embed">The embed to attach.</param>
+    /// <returns>The message response.</returns>
+    public Task<DiscordMessage> RespondAsync(string content, DiscordEmbed embed)
+    {
+        var builder = new DiscordMessageBuilder();
+        builder.WithContent(content);
+        builder.WithEmbed(embed);
+        return RespondAsync(builder);
+    }
+
+    /// <summary>
+    ///     Responds to the original message with the specified embed. If <see cref="Message" /> is <see langword="null" />, a
+    ///     new message is sent in <see cref="Channel" />; otherwise, a message as sent with a reply to <see cref="Message" />.
+    /// </summary>
+    /// <param name="embed">The embed to attach.</param>
+    /// <returns>The message response.</returns>
+    public Task<DiscordMessage> RespondAsync(DiscordEmbed embed)
+    {
+        var builder = new DiscordMessageBuilder();
+        builder.WithEmbed(embed);
+        return RespondAsync(builder);
+    }
+
+    /// <summary>
+    ///     Responds to the original message with the specified message. If <see cref="Message" /> is <see langword="null" />, a
+    ///     new message is sent in <see cref="Channel" />; otherwise, a message as sent with a reply to <see cref="Message" />.
+    /// </summary>
+    /// <param name="builder">The Discord message builder.</param>
+    /// <returns>The message response.</returns>
+    public Task<DiscordMessage> RespondAsync(Action<DiscordMessageBuilder> builder)
+    {
+        return Message is null ? Channel.SendMessageAsync(builder) : Message.RespondAsync(builder);
+    }
+
+    /// <summary>
+    ///     Responds to the original message with the specified message. If <see cref="Message" /> is <see langword="null" />, a
+    ///     new message is sent in <see cref="Channel" />; otherwise, a message as sent with a reply to <see cref="Message" />.
+    /// </summary>
+    /// <param name="builder">The Discord message builder.</param>
+    /// <returns>The message response.</returns>
+    public Task<DiscordMessage> RespondAsync(DiscordMessageBuilder builder)
+    {
+        return Message is null ? Channel.SendMessageAsync(builder) : Message.RespondAsync(builder);
     }
 }
