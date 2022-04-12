@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using BrackeysBot.API.Exceptions;
@@ -121,6 +121,20 @@ public interface IPluginManager
     ///     <see langword="false" />.
     /// </returns>
     bool TryGetPlugin(string name, [NotNullWhen(true)] out IPlugin? plugin);
+
+    /// <summary>
+    ///     Retrieves a plugin by name, case-sensitively. A return value indicates whether the retrieval succeeded.
+    /// </summary>
+    /// <param name="name">The name of the plugin to retrieve.</param>
+    /// <param name="plugin">
+    ///     When this method returns, contains the plugin instance if the retrieval succeeded, or <see langword="null" /> if the
+    ///     retrieval failed. Retrieval can fail if there is no loaded plugin with the specified name.
+    /// </param>
+    /// <returns>
+    ///     <see langword="true" /> if a plugin with the name <paramref name="name" /> was successfully found; otherwise
+    ///     <see langword="false" />.
+    /// </returns>
+    bool TryGetPlugin<T>(string name, [NotNullWhen(true)] out T? plugin) where T : IPlugin;
 
     /// <summary>
     ///     Unloads a plugin.
