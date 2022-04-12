@@ -28,10 +28,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DSharpPlus" Version="4.2.0-nightly-01109"/>
-        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.2.0-nightly-01109"/>
-        <PackageReference Include="DSharpPlus.Interactivity" Version="4.2.0-nightly-01109"/>
-        <PackageReference Include="DSharpPlus.SlashCommands" Version="4.2.0-nightly-01109"/>
+        <PackageReference Include="DSharpPlus" Version="4.2.0-nightly-01111"/>
+        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.2.0-nightly-01111"/>
+        <PackageReference Include="DSharpPlus.Interactivity" Version="4.2.0-nightly-01111"/>
+        <PackageReference Include="DSharpPlus.SlashCommands" Version="4.2.0-nightly-01111"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3"/>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0"/>
