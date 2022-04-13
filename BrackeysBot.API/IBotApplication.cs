@@ -6,7 +6,7 @@ namespace BrackeysBot.API;
 /// <summary>
 ///     Represents a bot application instance.
 /// </summary>
-public interface IBot
+public interface IBotApplication
 {
     /// <summary>
     ///     Gets the logger for this bot.

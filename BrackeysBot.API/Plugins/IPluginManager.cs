@@ -18,6 +18,12 @@ public interface IPluginManager
     event AsyncEventHandler<IPluginManager, PluginLoadEventArgs>? PluginLoaded;
 
     /// <summary>
+    ///     Gets the owning bot application.
+    /// </summary>
+    /// <value>The owning bot application.</value>
+    IBotApplication BotApplication { get; }
+
+    /// <summary>
     ///     Gets a read-only view of the plugins enabled by this manager.
     /// </summary>
     /// <value>A read-only view of <see cref="IPlugin" /> instances which are currently enabled.</value>
