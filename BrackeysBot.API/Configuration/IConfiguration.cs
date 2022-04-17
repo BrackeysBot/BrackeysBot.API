@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace BrackeysBot.API.Configuration;
 
@@ -21,6 +22,7 @@ public interface IConfiguration
     /// <typeparam name="T">The value type.</typeparam>
     /// <returns>The configuration value, or <paramref name="defaultValue" /> if the property name was not found.</returns>
     /// <remarks>Nested types are supported using a period (<c>.</c>) to specify child property names.</remarks>
+    [return: NotNullIfNotNull("defaultValue")]
     T? Get<T>(string propertyName, T? defaultValue = default);
 
     /// <summary>
