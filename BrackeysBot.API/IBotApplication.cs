@@ -11,6 +11,18 @@ namespace BrackeysBot.API;
 public interface IBotApplication
 {
     /// <summary>
+    ///     Gets the current bot application instance.
+    /// </summary>
+    /// <value>The current bot application instance.</value>
+    static IBotApplication Current { get; internal set; } = null!;
+
+    /// <summary>
+    ///     Gets the bot version.
+    /// </summary>
+    /// <value>The bot version.</value>
+    static string Version { get; } = string.Empty;
+
+    /// <summary>
     ///     Occurs when the buffered log has flushed the log events.
     /// </summary>
     event EventHandler<BufferedLogEventArgs>? BufferedLog;
@@ -26,10 +38,4 @@ public interface IBotApplication
     /// </summary>
     /// <value>The plugin manager.</value>
     IPluginManager PluginManager { get; }
-
-    /// <summary>
-    ///     Gets the bot version.
-    /// </summary>
-    /// <value>The bot version.</value>
-    static string Version { get; } = string.Empty;
 }
