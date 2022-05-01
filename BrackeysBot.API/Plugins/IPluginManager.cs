@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using BrackeysBot.API.Exceptions;
-using Emzi0767.Utilities;
 using NLog;
 
 namespace BrackeysBot.API.Plugins;
@@ -16,7 +15,7 @@ public interface IPluginManager
     /// <summary>
     ///     Called when a plugin has been loaded by this manager.
     /// </summary>
-    event AsyncEventHandler<IPluginManager, PluginLoadEventArgs>? PluginLoaded;
+    event EventHandler<PluginLoadEventArgs>? PluginLoaded;
 
     /// <summary>
     ///     Gets the owning bot application.

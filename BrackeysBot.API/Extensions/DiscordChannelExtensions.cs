@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DSharpPlus;
-using DSharpPlus.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Remora.Discord.API.Abstractions.Objects;
+using Remora.Discord.API.Abstractions.Rest;
+using Remora.Discord.Rest.API;
 
 namespace BrackeysBot.API.Extensions;
 
 /// <summary>
-///     Extension methods for <see cref="DiscordChannel" />.
+///     Extension methods for <see cref="IChannel" />.
 /// </summary>
 public static class DiscordChannelExtensions
 {
@@ -14,39 +16,28 @@ public static class DiscordChannelExtensions
     ///     Gets the category of this channel.
     /// </summary>
     /// <param name="channel">The channel whose category to retrieve.</param>
+    /// <param name="serviceProvider">
+    ///     A service provider object containing a <see cref="IDiscordRestChannelAPI" /> from which the category will be
+    ///     retrieved.
+    /// </param>
     /// <returns>The category of this channel, or <see langword="null" /> if this channel is not defined in a category.</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="channel" /> is <see langword="null" />.</exception>
-    public static DiscordChannel? GetCategory(this DiscordChannel channel)
+    /// <exception cref="ArgumentNullException">
+    ///     <para><paramref name="channel" /> is <see langword="null" />.</para>
+    ///     -or-
+    ///     <para><paramref name="serviceProvider" /> is <see langword="null" />.</para>
+    /// </exception>
+    public static async Task<IChannel?> GetCategoryAsync(this IChannel channel, IServiceProvider serviceProvider)
     {
         if (channel is null) throw new ArgumentNullException(nameof(channel));
+        if (serviceProvider is null) throw new ArgumentNullException(nameof(serviceProvider));
+
+        var channelApi = serviceProvider.GetRequiredService<IDiscordRestChannelAPI>();
 
         while (true)
         {
-            if (channel.IsCategory) return channel;
-            if (channel.Parent is not { } parent) return null;
-            channel = parent;
+            if (channel.Type == ChannelType.GuildCategory) return channel;
+            if (!channel.ParentID.HasValue || channel.ParentID.Value is not { } snowflake) return null;
+            channel = (await channelApi.GetChannelAsync(snowflake)).Entity;
         }
-    }
-
-    /// <summary>
-    ///     Normalizes a <see cref="DiscordChannel" /> so that the internal client is assured to be a specified value.
-    /// </summary>
-    /// <param name="channel">The <see cref="DiscordChannel" /> to normalize.</param>
-    /// <param name="client">The target client.</param>
-    /// <returns>
-    ///     A <see cref="DiscordChannel" /> whose public values will match <paramref name="channel" />, but whose internal client
-    ///     is <paramref name="client" />.
-    /// </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     <para><paramref name="channel" /> is <see langword="null" /></para>
-    ///     -or-
-    ///     <para><paramref name="client" /> is <see langword="null" /></para>
-    /// </exception>
-    public static async Task<DiscordChannel> NormalizeClientAsync(this DiscordChannel channel, DiscordClient client)
-    {
-        if (channel is null) throw new ArgumentNullException(nameof(channel));
-        if (client is null) throw new ArgumentNullException(nameof(client));
-
-        return await client.GetChannelAsync(channel.Id);
     }
 }
