@@ -10,7 +10,7 @@ namespace BrackeysBot.API.Extensions;
 /// <summary>
 ///     Extension methods for <see cref="IGuild" />.
 /// </summary>
-public static class DiscordGuildExtensions
+public static class GuildExtensions
 {
     /// <summary>
     ///     Joins all active threads in the guild that this client has permission to view.

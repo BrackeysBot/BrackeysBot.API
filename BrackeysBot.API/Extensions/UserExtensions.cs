@@ -10,7 +10,7 @@ namespace BrackeysBot.API.Extensions;
 /// <summary>
 ///     Extension methods for <see cref="IUser" />.
 /// </summary>
-public static class DiscordUserExtensions
+public static class UserExtensions
 {
     /// <summary>
     ///     Returns the current user as a member of a specified guild.

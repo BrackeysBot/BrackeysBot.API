@@ -6,9 +6,9 @@ using Remora.Discord.Extensions.Embeds;
 namespace BrackeysBot.API.Extensions;
 
 /// <summary>
-///     Extension methods for <see cref="DiscordEmbedBuilder" />.
+///     Extension methods for <see cref="EmbedBuilder" />.
 /// </summary>
-public static class DiscordEmbedBuilderExtensions
+public static class EmbedBuilderExtensions
 {
     /// <summary>
     ///     Adds a field of any value to an embed.

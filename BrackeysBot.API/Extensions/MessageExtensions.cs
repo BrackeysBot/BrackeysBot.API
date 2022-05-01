@@ -10,7 +10,7 @@ namespace BrackeysBot.API.Extensions;
 /// <summary>
 ///     Extension methods for <see cref="IMessage" />.
 /// </summary>
-public static class DiscordMessageExtensions
+public static class MessageExtensions
 {
     /// <summary>
     ///     Acknowledges a message by reacting to it.

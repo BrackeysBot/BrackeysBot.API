@@ -10,15 +10,14 @@ namespace BrackeysBot.API.Extensions;
 /// <summary>
 ///     Extension methods for <see cref="IChannel" />.
 /// </summary>
-public static class DiscordChannelExtensions
+public static class ChannelExtensions
 {
     /// <summary>
     ///     Gets the category of this channel.
     /// </summary>
     /// <param name="channel">The channel whose category to retrieve.</param>
     /// <param name="serviceProvider">
-    ///     A service provider object containing a <see cref="IDiscordRestChannelAPI" /> from which the category will be
-    ///     retrieved.
+    ///     The service provider whose <see cref="IDiscordRestChannelAPI" /> will be used to join threads.
     /// </param>
     /// <returns>The category of this channel, or <see langword="null" /> if this channel is not defined in a category.</returns>
     /// <exception cref="ArgumentNullException">
@@ -26,12 +25,32 @@ public static class DiscordChannelExtensions
     ///     -or-
     ///     <para><paramref name="serviceProvider" /> is <see langword="null" />.</para>
     /// </exception>
-    public static async Task<IChannel?> GetCategoryAsync(this IChannel channel, IServiceProvider serviceProvider)
+    public static Task<IChannel?> GetCategoryAsync(this IChannel channel, IServiceProvider serviceProvider)
     {
         if (channel is null) throw new ArgumentNullException(nameof(channel));
         if (serviceProvider is null) throw new ArgumentNullException(nameof(serviceProvider));
 
         var channelApi = serviceProvider.GetRequiredService<IDiscordRestChannelAPI>();
+        return channel.GetCategoryAsync(channelApi);
+    }
+
+    /// <summary>
+    ///     Gets the category of this channel.
+    /// </summary>
+    /// <param name="channel">The channel whose category to retrieve.</param>
+    /// <param name="channelApi">
+    ///     The <see cref="IDiscordRestChannelAPI" /> to be used to join threads.
+    /// </param>
+    /// <returns>The category of this channel, or <see langword="null" /> if this channel is not defined in a category.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     <para><paramref name="channel" /> is <see langword="null" />.</para>
+    ///     -or-
+    ///     <para><paramref name="channelApi" /> is <see langword="null" />.</para>
+    /// </exception>
+    public static async Task<IChannel?> GetCategoryAsync(this IChannel channel, IDiscordRestChannelAPI channelApi)
+    {
+        if (channel is null) throw new ArgumentNullException(nameof(channel));
+        if (channelApi is null) throw new ArgumentNullException(nameof(channelApi));
 
         while (true)
         {
