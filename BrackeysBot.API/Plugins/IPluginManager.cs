@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using BrackeysBot.API.Exceptions;
 using Emzi0767.Utilities;
 using NLog;
@@ -40,6 +41,20 @@ public interface IPluginManager
     /// </summary>
     /// <value>The logger.</value>
     ILogger Logger { get; }
+
+    /// <summary>
+    ///     Gets the directory from which plugins are loaded by this manager.
+    /// </summary>
+    /// <value>A <see cref="DirectoryInfo" /> instance pointing to the manager's plugin directory.</value>
+    DirectoryInfo PluginDirectory { get; }
+
+    /// <summary>
+    ///     Gets the plugin files which this manager will attempt to load.
+    /// </summary>
+    /// <value>
+    ///     An array of <see cref="FileInfo" /> instances pointing to the plugins which this manager will attempt to load.
+    /// </value>
+    FileInfo[] PluginFiles { get; }
 
     /// <summary>
     ///     Disables a plugin.
