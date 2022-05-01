@@ -183,6 +183,17 @@ public static class FormatUtility
     }
 
     /// <summary>
+    ///     Returns a string with the specified timestamp encoded as a timestamp specifier.
+    /// </summary>
+    /// <param name="timestamp">The timestamp to encode.</param>
+    /// <param name="timestampFormat">The format for the encoding. Default is <see cref="TimestampFormat.Relative" />.</param>
+    /// <returns>A string representing the timestamp.</returns>
+    public static string Timestamp(DateTimeOffset timestamp, TimestampFormat timestampFormat = TimestampFormat.Relative)
+    {
+        return $"<t:{timestamp.ToUnixTimeSeconds()}:{(char) timestampFormat}>";
+    }
+
+    /// <summary>
     ///     Returns a string with the specified text surrounded by the markdown underline specifier.
     /// </summary>
     /// <param name="value">The value to encapsulate as underline.</param>
