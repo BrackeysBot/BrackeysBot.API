@@ -32,8 +32,8 @@
         <PackageReference Include="DSharpPlus.CommandsNext" Version="4.3.0-nightly-01125"/>
         <PackageReference Include="DSharpPlus.Interactivity" Version="4.3.0-nightly-01125"/>
         <PackageReference Include="DSharpPlus.SlashCommands" Version="4.3.0-nightly-01125"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4"/>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0"/>
         <PackageReference Include="NLog" Version="4.7.15"/>
     </ItemGroup>
