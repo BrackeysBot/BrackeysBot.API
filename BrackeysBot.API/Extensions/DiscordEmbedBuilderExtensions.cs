@@ -1,6 +1,7 @@
 ﻿using System;
-using DSharpPlus;
-using DSharpPlus.Entities;
+using Remora.Discord.API;
+using Remora.Discord.API.Abstractions.Objects;
+using Remora.Discord.Extensions.Embeds;
 
 namespace BrackeysBot.API.Extensions;
 
@@ -12,40 +13,41 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Adds a field of any value to an embed.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="name">The field name.</param>
     /// <param name="value">The field value.</param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
     /// <typeparam name="T">The value type of the field.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
-    public static DiscordEmbedBuilder AddField<T>(this DiscordEmbedBuilder embedBuilder, string name, T value,
-        bool inline = false)
+    public static EmbedBuilder AddField<T>(this EmbedBuilder embedBuilder, string name, T value, bool inline = false)
     {
-        return embedBuilder.AddField(name, value?.ToString(), inline);
+        if (value is null) throw new ArgumentNullException(nameof(value));
+        return embedBuilder.AddField(name, value.ToString()!, inline).Entity;
     }
 
     /// <summary>
     ///     Adds a field of any value to an embed.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="name">The field name.</param>
     /// <param name="valueEvaluator">The delegate to execute to retrieve the field value.</param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
     /// <typeparam name="T">The value type of the field.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
-    public static DiscordEmbedBuilder AddField<T>(this DiscordEmbedBuilder embedBuilder, string name, Func<T> valueEvaluator,
+    public static EmbedBuilder AddField<T>(this EmbedBuilder embedBuilder, string name, Func<T> valueEvaluator,
         bool inline = false)
     {
         if (valueEvaluator is null) throw new ArgumentNullException(nameof(valueEvaluator));
-        return embedBuilder.AddField(name, valueEvaluator()?.ToString(), inline);
+        if (valueEvaluator()?.ToString() is not { } value) throw new ArgumentNullException(nameof(valueEvaluator));
+        return embedBuilder.AddField(name, value, inline).Entity;
     }
 
     /// <summary>
     ///     Conditionally adds a field to an embed.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="conditionEvaluator">
     ///     A delegate which returns <see langword="true" /> if the field should be added; otherwise, returns
     ///     <see langword="false" />.
@@ -55,11 +57,10 @@ public static class DiscordEmbedBuilderExtensions
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
     /// <typeparam name="T">The value type of the field.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldIf<T>(this DiscordEmbedBuilder embedBuilder, Func<bool> conditionEvaluator,
+    public static EmbedBuilder AddFieldIf<T>(this EmbedBuilder embedBuilder, Func<bool> conditionEvaluator,
         string name, T value, bool inline = false)
     {
         if (conditionEvaluator is null) throw new ArgumentNullException(nameof(conditionEvaluator));
-
         if (!conditionEvaluator()) return embedBuilder;
         return embedBuilder.AddField(name, value, inline);
     }
@@ -67,7 +68,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Conditionally adds a field to an embed.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="conditionEvaluator">
     ///     A delegate which returns <see langword="true" /> if the field should be added; otherwise, returns
     ///     <see langword="false" />.
@@ -77,11 +78,10 @@ public static class DiscordEmbedBuilderExtensions
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
     /// <typeparam name="T">The value type of the field.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldIf<T>(this DiscordEmbedBuilder embedBuilder, Func<bool> conditionEvaluator,
+    public static EmbedBuilder AddFieldIf<T>(this EmbedBuilder embedBuilder, Func<bool> conditionEvaluator,
         string name, Func<T> valueEvaluator, bool inline = false)
     {
         if (valueEvaluator is null) throw new ArgumentNullException(nameof(valueEvaluator));
-
         if (!conditionEvaluator()) return embedBuilder;
         return embedBuilder.AddField(name, valueEvaluator(), inline);
     }
@@ -89,18 +89,17 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Conditionally adds a field to an embed, lazily.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="condition"><see langword="true" /> if the field should be added; otherwise, <see langword="false" />.</param>
     /// <param name="name">The field name.</param>
     /// <param name="valueEvaluator">The delegate to execute if <paramref name="condition" /> is <see langword="true" />.</param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
     /// <typeparam name="T">The value type of the field.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldIf<T>(this DiscordEmbedBuilder embedBuilder, bool condition, string name,
+    public static EmbedBuilder AddFieldIf<T>(this EmbedBuilder embedBuilder, bool condition, string name,
         Func<T> valueEvaluator, bool inline = false)
     {
         if (valueEvaluator is null) throw new ArgumentNullException(nameof(valueEvaluator));
-
         if (!condition) return embedBuilder;
         return embedBuilder.AddField(name, valueEvaluator(), inline);
     }
@@ -108,14 +107,14 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Conditionally adds a field to an embed.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="condition"><see langword="true" /> if the field should be added; otherwise, <see langword="false" />.</param>
     /// <param name="name">The field name.</param>
     /// <param name="value">The field value.</param>
     /// <param name="inline"><see langword="true" /> to display the field inline; otherwise, <see langword="false" />.</param>
     /// <typeparam name="T">The value type of the field.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldIf<T>(this DiscordEmbedBuilder embedBuilder, bool condition, string name, T value,
+    public static EmbedBuilder AddFieldIf<T>(this EmbedBuilder embedBuilder, bool condition, string name, T value,
         bool inline = false)
     {
         if (!condition) return embedBuilder;
@@ -125,7 +124,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Adds a field to an embed whose value will be one of two values, determined by a specified condition.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="condition">
     ///     <see langword="true" /> if the value used will be <paramref name="valueIfTrue" />.
     ///     <see langword="false" /> if the value used will be <paramref name="valueIfFalse" />.
@@ -141,7 +140,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <typeparam name="TTrue">The type of the truth value.</typeparam>
     /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder, bool condition,
+    public static EmbedBuilder AddFieldOrElse<TTrue, TFalse>(this EmbedBuilder embedBuilder, bool condition,
         string name, TTrue valueIfTrue, TFalse valueIfFalse, bool inline = false)
     {
         return condition
@@ -152,7 +151,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Adds a field to an embed whose value will be one of two values, determined by a specified condition.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="condition">
     ///     <see langword="true" /> if the value used will be determined by <paramref name="valueEvaluatorIfTrue" />; or returns
     ///     <see langword="false" /> if the value used will be determined by <paramref name="valueEvaluatorIfFalse" />.
@@ -168,7 +167,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <typeparam name="TTrue">The type of the truth value.</typeparam>
     /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder, bool condition,
+    public static EmbedBuilder AddFieldOrElse<TTrue, TFalse>(this EmbedBuilder embedBuilder, bool condition,
         string name, Func<TTrue> valueEvaluatorIfTrue, Func<TFalse> valueEvaluatorIfFalse, bool inline = false)
     {
         if (valueEvaluatorIfTrue is null) throw new ArgumentNullException(nameof(valueEvaluatorIfTrue));
@@ -182,7 +181,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Adds a field to an embed whose value will be one of two values, determined by a specified condition.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="conditionEvaluator">
     ///     A delegate which returns <see langword="true" /> if the value used will be determined by
     ///     <paramref name="valueEvaluatorIfTrue" />; or returns <see langword="false" />  if the value used will be determined by
@@ -201,7 +200,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <typeparam name="TTrue">The type of the truth value.</typeparam>
     /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder,
+    public static EmbedBuilder AddFieldOrElse<TTrue, TFalse>(this EmbedBuilder embedBuilder,
         Func<bool> conditionEvaluator, string name, Func<TTrue> valueEvaluatorIfTrue, Func<TFalse> valueEvaluatorIfFalse,
         bool inline = false)
     {
@@ -217,7 +216,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <summary>
     ///     Adds a field to an embed whose value will be one of two values, determined by a specified condition.
     /// </summary>
-    /// <param name="embedBuilder">The <see cref="DiscordEmbedBuilder" /> to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="conditionEvaluator">
     ///     A delegate which returns <see langword="true" /> if the value used will be <paramref name="valueIfTrue" />; or returns
     ///     <see langword="false" />  if the value used will be <paramref name="valueIfFalse" />.
@@ -236,7 +235,7 @@ public static class DiscordEmbedBuilderExtensions
     /// <typeparam name="TTrue">The type of the truth value.</typeparam>
     /// <typeparam name="TFalse">The type of the false value.</typeparam>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder AddFieldOrElse<TTrue, TFalse>(this DiscordEmbedBuilder embedBuilder,
+    public static EmbedBuilder AddFieldOrElse<TTrue, TFalse>(this EmbedBuilder embedBuilder,
         Func<bool> conditionEvaluator, string name, TTrue valueIfTrue, TFalse valueIfFalse, bool inline = false)
     {
         if (conditionEvaluator is null) throw new ArgumentNullException(nameof(conditionEvaluator));
@@ -247,31 +246,21 @@ public static class DiscordEmbedBuilderExtensions
     }
 
     /// <summary>
-    ///     Sets the embed's author to a specified <see cref="DiscordUser" />.
-    /// </summary>
-    /// <param name="embedBuilder">The embed builder to modify.</param>
-    /// <param name="author">The author.</param>
-    /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder WithAuthor(this DiscordEmbedBuilder embedBuilder, DiscordUser author)
-    {
-        return embedBuilder.WithAuthor(author.GetUsernameWithDiscriminator(), iconUrl: author.GetAvatarUrl(ImageFormat.Png));
-    }
-
-    /// <summary>
     ///     Populates the thumbnail and footer of this embed builder with the guild's branding.
     /// </summary>
-    /// <param name="embedBuilder">The embed builder to modify.</param>
+    /// <param name="embedBuilder">The <see cref="EmbedBuilder" /> to modify.</param>
     /// <param name="guild">The guild whose branding to apply.</param>
     /// <param name="addThumbnail">
     ///     <see langword="true" /> to include the guild icon as a thumbnail; otherwise, <see langword="false" />.
     /// </param>
     /// <returns><paramref name="embedBuilder" />, to allow for method chaining.</returns>
-    public static DiscordEmbedBuilder WithGuildInfo(this DiscordEmbedBuilder embedBuilder, DiscordGuild guild,
+    public static EmbedBuilder WithGuildInfo(this EmbedBuilder embedBuilder, IGuild guild,
         bool addThumbnail = true)
     {
-        embedBuilder.WithFooter(guild.Name, guild.IconUrl);
+        var iconUrl = CDN.GetGuildIconUrl(guild).ToString();
+        embedBuilder.WithFooter(guild.Name, iconUrl);
 
-        if (addThumbnail) embedBuilder.WithThumbnail(guild.IconUrl);
+        if (addThumbnail) embedBuilder.WithThumbnailUrl(iconUrl!);
         return embedBuilder;
     }
 }

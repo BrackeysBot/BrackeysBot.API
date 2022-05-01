@@ -1,5 +1,5 @@
 ﻿using System;
-using DSharpPlus;
+using Remora.Discord.API.Abstractions.Gateway.Commands;
 
 namespace BrackeysBot.API.Plugins;
 
@@ -13,7 +13,7 @@ public sealed class PluginIntentsAttribute : Attribute
     ///     Initializes a new instance of the <see cref="PluginIntentsAttribute" /> class.
     /// </summary>
     /// <param name="intents">The intents.</param>
-    public PluginIntentsAttribute(DiscordIntents intents)
+    public PluginIntentsAttribute(GatewayIntents intents)
     {
         Intents = intents;
     }
@@ -22,5 +22,5 @@ public sealed class PluginIntentsAttribute : Attribute
     ///     Gets the intents.
     /// </summary>
     /// <value>The intents.</value>
-    public DiscordIntents Intents { get; }
+    public GatewayIntents Intents { get; }
 }
