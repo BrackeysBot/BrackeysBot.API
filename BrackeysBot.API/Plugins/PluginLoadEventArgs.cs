@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Emzi0767.Utilities;
 
 namespace BrackeysBot.API.Plugins;
 
 /// <summary>
 ///     Provides event information for <see cref="IPluginManager.PluginLoaded" />.
 /// </summary>
-public sealed class PluginLoadEventArgs : EventArgs
+public sealed class PluginLoadEventArgs : AsyncEventArgs
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="PluginLoadEventArgs" /> class.
