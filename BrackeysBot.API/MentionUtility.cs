@@ -1,4 +1,5 @@
-﻿using Remora.Rest.Core;
+﻿using System;
+using System.Globalization;
 
 namespace BrackeysBot.API;
 
@@ -12,13 +13,13 @@ namespace BrackeysBot.API;
 public static class MentionUtility
 {
     /// <summary>
-    ///     Returns a channel mention string built from the specified channel snowflake.
+    ///     Returns a channel mention string built from the specified channel ID.
     /// </summary>
-    /// <param name="id">The snowflake of the channel to mention.</param>
+    /// <param name="id">The ID of the channel to mention.</param>
     /// <returns>A channel mention string in the format <c>&lt;#123&gt;</c>.</returns>
-    public static string MentionChannel(Snowflake id)
+    public static string MentionChannel(decimal id)
     {
-        return MentionChannel(id.Value);
+        return $"<#{id:N0}>";
     }
 
     /// <summary>
@@ -26,19 +27,20 @@ public static class MentionUtility
     /// </summary>
     /// <param name="id">The ID of the channel to mention.</param>
     /// <returns>A channel mention string in the format <c>&lt;#123&gt;</c>.</returns>
+    [CLSCompliant(false)]
     public static string MentionChannel(ulong id)
     {
         return $"<#{id}>";
     }
 
     /// <summary>
-    ///     Returns a role mention string built from the specified role snowflake.
+    ///     Returns a role mention string built from the specified channel ID.
     /// </summary>
-    /// <param name="id">The snowflake of the role to mention.</param>
+    /// <param name="id">The ID of the role to mention.</param>
     /// <returns>A role mention string in the format <c>&lt;@&amp;123&gt;</c>.</returns>
-    public static string MentionRole(Snowflake id)
+    public static string MentionRole(decimal id)
     {
-        return MentionRole(id.Value);
+        return $"<@&{id:N0}>";
     }
 
     /// <summary>
@@ -46,25 +48,21 @@ public static class MentionUtility
     /// </summary>
     /// <param name="id">The ID of the role to mention.</param>
     /// <returns>A role mention string in the format <c>&lt;@&amp;123&gt;</c>.</returns>
+    [CLSCompliant(false)]
     public static string MentionRole(ulong id)
     {
         return $"<@&{id}>";
     }
 
     /// <summary>
-    ///     Returns a user mention string built from the specified user snowflake.
+    ///     Returns a user mention string built from the specified user ID.
     /// </summary>
-    /// <param name="id">The snowflake of the user to mention.</param>
-    /// <param name="nickname">
-    ///     <see langword="true" /> if the mention string should account for nicknames; otherwise, <see langword="false" />.
-    /// </param>
-    /// <returns>
-    ///     A user mention string in the format <c>&lt;@!123&gt;</c> if <paramref name="nickname" /> is <see langword="true" />,
-    ///     or in the format <c>&lt;@123&gt;</c> if <paramref name="nickname" /> is <see langword="false" />.
-    /// </returns>
-    public static string MentionUser(Snowflake id, bool nickname = true)
+    /// <param name="id">The ID of the user to mention.</param>
+    /// <returns>A user mention string in the format <c>&lt;@123&gt;</c>.</returns>
+    [CLSCompliant(false)]
+    public static string MentionUser(decimal id)
     {
-        return MentionUser(id.Value, nickname);
+        return MentionUser(id, false);
     }
 
     /// <summary>
@@ -78,9 +76,69 @@ public static class MentionUtility
     ///     A user mention string in the format <c>&lt;@!123&gt;</c> if <paramref name="nickname" /> is <see langword="true" />,
     ///     or in the format <c>&lt;@123&gt;</c> if <paramref name="nickname" /> is <see langword="false" />.
     /// </returns>
-    public static string MentionUser(ulong id, bool nickname = true)
+    [CLSCompliant(false)]
+    public static string MentionUser(decimal id, bool nickname)
+    {
+        return nickname ? $"<@!{id:N0}>" : $"<@{id:N0}>";
+    }
+
+    /// <summary>
+    ///     Returns a user mention string built from the specified user ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to mention.</param>
+    /// <returns>A user mention string in the format <c>&lt;@123&gt;</c>.</returns>
+    [CLSCompliant(false)]
+    public static string MentionUser(ulong id)
+    {
+        return MentionUser(id, false);
+    }
+
+    /// <summary>
+    ///     Returns a user mention string built from the specified user ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to mention.</param>
+    /// <param name="nickname">
+    ///     <see langword="true" /> if the mention string should account for nicknames; otherwise, <see langword="false" />.
+    /// </param>
+    /// <returns>
+    ///     A user mention string in the format <c>&lt;@!123&gt;</c> if <paramref name="nickname" /> is <see langword="true" />,
+    ///     or in the format <c>&lt;@123&gt;</c> if <paramref name="nickname" /> is <see langword="false" />.
+    /// </returns>
+    [CLSCompliant(false)]
+    public static string MentionUser(ulong id, bool nickname)
     {
         return nickname ? $"<@!{id}>" : $"<@{id}>";
+    }
+
+    /// <summary>
+    ///     Parses a provided channel mention string to a decimal value representing the channel ID. A return value indicates
+    ///     whether the parse succeeded.
+    /// </summary>
+    /// <param name="value">A string containing a mention string to parse, in the format <c>&lt;#123&gt;</c>.</param>
+    /// <param name="result">
+    ///     When this method returns, contains the decimal value representing the channel ID contained within
+    ///     <paramref name="value" />, if the conversion succeeded, or zero if the conversion failed. The conversion fails if the
+    ///     <paramref name="value" /> parameter is <see langword="null" /> or <see cref="string.Empty" />, is not of the correct
+    ///     format, or represents a number less than <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
+    /// </param>
+    /// <returns><see langword="true" /> if the parse was successful; otherwise, <see langword="false" />.</returns>
+    public static bool TryParseChannel(string? value, out decimal result)
+    {
+        result = 0;
+        if (string.IsNullOrWhiteSpace(value)) return false;
+
+        if (value.Length >= 3 && value[0] == '<' && value[1] == '#' && value[^1] == '>')
+        {
+            value = value.Substring(2, value.Length - 3); // <#123>
+
+            if (ulong.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out ulong actual))
+            {
+                result = actual;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -94,39 +152,48 @@ public static class MentionUtility
     ///     <paramref name="value" /> parameter is <see langword="null" /> or <see cref="string.Empty" />, is not of the correct
     ///     format, or represents a number less than <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
     /// </param>
-    /// <returns></returns>
+    /// <returns><see langword="true" /> if the parse was successful; otherwise, <see langword="false" />.</returns>
+    [CLSCompliant(false)]
     public static bool TryParseChannel(string? value, out ulong result)
     {
-        bool success = TryParseChannel(value, out Snowflake snowflake);
-        result = snowflake.Value;
-        return success;
-    }
-
-    /// <summary>
-    ///     Parses a provided channel mention string to a snowflake representing the channel snowflake. A return value
-    ///     indicates whether the parse succeeded.
-    /// </summary>
-    /// <param name="value">A string containing a mention string to parse, in the format <c>&lt;#123&gt;</c>.</param>
-    /// <param name="result">
-    ///     When this method returns, contains the snowflake representing the channel snowflake contained within
-    ///     <paramref name="value" />, if the conversion succeeded, or an empty instance of <see cref="Snowflake" /> if the
-    ///     conversion failed. The conversion fails if the <paramref name="value" /> parameter is <see langword="null" /> or
-    ///     <see cref="string.Empty" />, is not of the correct format, or represents a number less than
-    ///     <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
-    /// </param>
-    /// <returns></returns>
-    public static bool TryParseChannel(string? value, out Snowflake result)
-    {
-        result = default;
+        result = 0;
         if (string.IsNullOrWhiteSpace(value)) return false;
 
         if (value.Length >= 3 && value[0] == '<' && value[1] == '#' && value[^1] == '>')
         {
             value = value.Substring(2, value.Length - 3); // <#123>
 
-            if (Snowflake.TryParse(value, out Snowflake? actual))
+            if (ulong.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out result))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Parses a provided role mention string to a decimal value representing the role ID. A return value indicates whether
+    ///     the parse succeeded.
+    /// </summary>
+    /// <param name="value">A string containing a mention string to parse, in the format <c>&lt;@&amp;123&gt;</c>.</param>
+    /// <param name="result">
+    ///     When this method returns, contains the decimal value representing the role ID contained within
+    ///     <paramref name="value" />, if the conversion succeeded, or zero if the conversion failed. The conversion fails if the
+    ///     <paramref name="value" /> parameter is <see langword="null" /> or <see cref="string.Empty" />, is not of the correct
+    ///     format, or represents a number less than <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
+    /// </param>
+    /// <returns><see langword="true" /> if the parse was successful; otherwise, <see langword="false" />.</returns>
+    public static bool TryParseRole(string? value, out decimal result)
+    {
+        result = 0;
+        if (string.IsNullOrWhiteSpace(value)) return false;
+
+        if (value.Length >= 4 && value[0] == '<' && value[1] == '@' && value[2] == '&' && value[^1] == '>')
+        {
+            value = value.Substring(3, value.Length - 4); // <@&123>
+
+            if (ulong.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out ulong actual))
             {
-                result = actual.Value;
+                result = actual;
                 return true;
             }
         }
@@ -145,39 +212,53 @@ public static class MentionUtility
     ///     <paramref name="value" /> parameter is <see langword="null" /> or <see cref="string.Empty" />, is not of the correct
     ///     format, or represents a number less than <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
     /// </param>
-    /// <returns></returns>
+    /// <returns><see langword="true" /> if the parse was successful; otherwise, <see langword="false" />.</returns>
+    [CLSCompliant(false)]
     public static bool TryParseRole(string? value, out ulong result)
     {
-        bool success = TryParseRole(value, out Snowflake snowflake);
-        result = snowflake.Value;
-        return success;
-    }
-
-    /// <summary>
-    ///     Parses a provided role mention string to a snowflake representing the role snowflake. A return value indicates
-    ///     whether the parse succeeded.
-    /// </summary>
-    /// <param name="value">A string containing a mention string to parse, in the format <c>&lt;@&amp;123&gt;</c>.</param>
-    /// <param name="result">
-    ///     When this method returns, contains the snowflake value representing the role snowflake contained within
-    ///     <paramref name="value" />, if the conversion succeeded, or an empty instance of <see cref="Snowflake" /> if the
-    ///     conversion failed. The conversion fails if the <paramref name="value" /> parameter is <see langword="null" /> or
-    ///     <see cref="string.Empty" />, is not of the correct format, or represents a number less than
-    ///     <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
-    /// </param>
-    /// <returns></returns>
-    public static bool TryParseRole(string? value, out Snowflake result)
-    {
-        result = default;
+        result = 0;
         if (string.IsNullOrWhiteSpace(value)) return false;
 
         if (value.Length >= 4 && value[0] == '<' && value[1] == '@' && value[2] == '&' && value[^1] == '>')
         {
             value = value.Substring(3, value.Length - 4); // <@&123>
 
-            if (Snowflake.TryParse(value, out Snowflake? actual))
+            if (ulong.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out result))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Parses a provided user mention string to a decimal value representing the user ID. A return value indicates whether
+    ///     the parse succeeded.
+    /// </summary>
+    /// <param name="value">
+    ///     A string containing a mention string to parse, in the format <c>&lt;@123&gt;</c> or <c>&lt;@!123&gt;</c>.
+    /// </param>
+    /// <param name="result">
+    ///     When this method returns, contains the decimal value representing the user ID contained within
+    ///     <paramref name="value" />, if the conversion succeeded, or zero if the conversion failed. The conversion fails if the
+    ///     <paramref name="value" /> parameter is <see langword="null" /> or <see cref="string.Empty" />, is not of the correct
+    ///     format, or represents a number less than <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
+    /// </param>
+    /// <returns><see langword="true" /> if the parse was successful; otherwise, <see langword="false" />.</returns>
+    public static bool TryParseUser(string? value, out decimal result)
+    {
+        result = 0;
+        if (string.IsNullOrWhiteSpace(value)) return false;
+
+        if (value.Length >= 3 && value[0] == '<' && value[1] == '@' && value[^1] == '>')
+        {
+            if (value.Length >= 4 && value[2] == '!')
+                value = value.Substring(3, value.Length - 4); // <@!123>
+            else
+                value = value.Substring(2, value.Length - 3); // <@123>
+
+            if (ulong.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out ulong actual))
             {
-                result = actual.Value;
+                result = actual;
                 return true;
             }
         }
@@ -198,32 +279,11 @@ public static class MentionUtility
     ///     <paramref name="value" /> parameter is <see langword="null" /> or <see cref="string.Empty" />, is not of the correct
     ///     format, or represents a number less than <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
     /// </param>
-    /// <returns></returns>
+    /// <returns><see langword="true" /> if the parse was successful; otherwise, <see langword="false" />.</returns>
+    [CLSCompliant(false)]
     public static bool TryParseUser(string? value, out ulong result)
     {
-        bool success = TryParseUser(value, out Snowflake snowflake);
-        result = snowflake.Value;
-        return success;
-    }
-
-    /// <summary>
-    ///     Parses a provided user mention string to a snowflake representing the user snowflake. A return value indicates
-    ///     whether the parse succeeded.
-    /// </summary>
-    /// <param name="value">
-    ///     A string containing a mention string to parse, in the format <c>&lt;@123&gt;</c> or <c>&lt;@!123&gt;</c>.
-    /// </param>
-    /// <param name="result">
-    ///     When this method returns, contains the snowflake value representing the user snowflake contained within
-    ///     <paramref name="value" />, if the conversion succeeded, or an empty instance of <see cref="Snowflake" /> if the
-    ///     conversion failed. The conversion fails if the <paramref name="value" /> parameter is <see langword="null" /> or
-    ///     <see cref="string.Empty" />, is not of the correct format, or represents a number less than
-    ///     <see cref="ulong.MinValue" /> or greater than <see cref="ulong.MaxValue" />.
-    /// </param>
-    /// <returns></returns>
-    public static bool TryParseUser(string? value, out Snowflake result)
-    {
-        result = default;
+        result = 0;
         if (string.IsNullOrWhiteSpace(value)) return false;
 
         if (value.Length >= 3 && value[0] == '<' && value[1] == '@' && value[^1] == '>')
@@ -233,11 +293,8 @@ public static class MentionUtility
             else
                 value = value.Substring(2, value.Length - 3); // <@123>
 
-            if (Snowflake.TryParse(value, out Snowflake? actual))
-            {
-                result = actual.Value;
+            if (ulong.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out result))
                 return true;
-            }
         }
 
         return false;
