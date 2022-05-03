@@ -109,7 +109,7 @@ public sealed class ConversationContext
         return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel)
         {
             Interaction = context.Interaction,
-            Message = context.Interaction.Data.Resolved.Messages.FirstOrDefault().Value
+            Message = context.Interaction?.Data?.Resolved?.Messages?.FirstOrDefault().Value
         };
     }
 
@@ -123,7 +123,7 @@ public sealed class ConversationContext
         return new ConversationContext(context.Services, context.Member ?? context.User, context.Channel)
         {
             Interaction = context.Interaction,
-            Message = context.Interaction.Data.Resolved.Messages.FirstOrDefault().Value
+            Message = context.Interaction?.Data?.Resolved?.Messages?.FirstOrDefault().Value
         };
     }
 
