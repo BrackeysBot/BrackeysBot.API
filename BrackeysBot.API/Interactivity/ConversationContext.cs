@@ -16,7 +16,20 @@ namespace BrackeysBot.API.Interactivity;
 /// <remarks>This API is experimental, and is subject to sudden undocumented changes!</remarks>
 public sealed class ConversationContext
 {
-    private ConversationContext(IServiceProvider serviceProvider, DiscordUser user, DiscordChannel channel)
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ConversationContext" /> class.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider.</param>
+    /// <param name="user">The user who initiated the conversation.</param>
+    /// <param name="channel">The channel in which the conversation is taking place.</param>
+    /// <exception cref="ArgumentNullException">
+    ///     <para><paramref name="serviceProvider" /> is <see langword="null" />.</para>
+    ///     -or-
+    ///     <para><paramref name="user" /> is <see langword="null" />.</para>
+    ///     -or-
+    ///     <para><paramref name="channel" /> is <see langword="null" />.</para>
+    /// </exception>
+    public ConversationContext(IServiceProvider serviceProvider, DiscordUser user, DiscordChannel channel)
     {
         Services = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         Client = serviceProvider.GetRequiredService<DiscordClient>();
